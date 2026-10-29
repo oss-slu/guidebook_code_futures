@@ -225,6 +225,24 @@ This is a general lesson rather than a quirk of one tool. **A composite score en
 
 One check is excluded for a related reason: `Maintained` scores activity in the last ninety days. It is meaningful mid-semester and collapses for every repository over a winter break, which would make a seasonal artefact look like a finding.
 
+Six of the Scorecard checks are not used at all, and the reasons are worth knowing because they are the same reasons you should be careful with any tool's output. Two report the *presence of a defect* rather than the presence of a practice, so reading them as "is this in place" inverts them. One is a proportion of recent commits rather than a state. Three ask questions we can answer better from the repository directly — the branch gate is one, where Scorecard's score flattens the difference between protection that requires a review and protection that requires zero.
+
+### **Section 6 — Code Quality Analysis**
+
+| Probe | Asks |
+| ----- | ----- |
+| `quality.project` | Is the project analysed by SonarQube Cloud? |
+| `quality.gate` | Is a quality gate defined, and does CI apply it? |
+| `quality.hotspots_reviewed` | Have flagged security hotspots been reviewed? |
+
+**This section carries no grade.** SonarQube Cloud produces a maintainability rating, a reliability rating, and issue counts. None of them appear in your report, because a letter grade is a vendor's model rendered as a letter, and this report describes which practices are in place. What it records is whether the analysis runs and whether anyone has acted on what it flags.
+
+**The hotspot is the part worth your attention**, and it is the clearest illustration of §2's argument in any tool here. A security hotspot is not a vulnerability. It is security-sensitive code that a person must review, and the tool is explicitly declining to decide. Reviewing one means judging whether the context makes it safe and recording that judgement. Most reviews end in "this is fine", which is a result rather than wasted effort: the next person can see it was considered rather than missed.
+
+**What it does not mean.** A passing quality gate means the code met thresholds somebody configured, which are adjustable and frequently left at a default nobody chose. A rising issue count can mean the code got worse, or that a new rule was switched on.
+
+**This analysis is public.** SonarQube Cloud publishes analysis of public repositories on sonarcloud.io, visible to anyone without an account. Your code is already public, so this discloses nothing new, and you are being told in advance rather than finding out later.
+
 ---
 
 ## **4. Common Patterns and What They Mean**
