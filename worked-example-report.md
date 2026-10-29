@@ -6,20 +6,20 @@
 >
 > Your report will have this shape. Only the findings differ.
 
-| | |
-| ----- | ----- |
-| **Repository** | `oss-slu/tidewater-atlas` |
-| **Commit** | `a0408fc` |
-| **Collected** | 2026-11-01 14:00 UTC |
-| **Schema** | `code-futures/v1` |
-| **Languages** | Python, JavaScript |
+|                    |                                                        |
+| ------------------ | ------------------------------------------------------ |
+| **Repository**     | `oss-slu/tidewater-atlas`                              |
+| **Commit**         | `a0408fc`                                              |
+| **Collected**      | 2026-11-01 14:00 UTC                                   |
+| **Schema**         | `code-futures/v1`                                      |
+| **Languages**      | Python, JavaScript                                     |
 | **Classification** | Internal — shareable within the program, not published |
 
 ---
 
 ## **How to read this**
 
-This report describes which engineering practices are in place in one repository. It does not assess the code, and no figure in it reaches an evaluation.
+This report describes which engineering practices are in place in one repository. It records practice. Judging the code is a separate job, done by people, and nothing here feeds an evaluation.
 
 Each finding carries one of four outcomes:
 
@@ -28,30 +28,30 @@ Each finding carries one of four outcomes:
 * **absent** — we looked, and it is not there
 * **unreadable** — we could not find out. This describes our tooling, not your repository
 
-The companion guidebook explains each probe and what it would be wrong to conclude from it. Read §3 before acting on anything below.
+The companion guidebook explains each probe and the limits of what it shows. Read §3 before acting on anything below.
 
 ---
 
 ## **Outcomes**
 
-| Outcome | Count |
-| ----- | ----- |
-| enforced | 6 |
-| present | 7 |
-| absent | 8 |
-| unreadable | 1 |
+| Outcome    | Count |
+| ---------- | ----- |
+| enforced   | 6     |
+| present    | 7     |
+| absent     | 8     |
+| unreadable | 1     |
 
 ### **No score**
 
 Twenty-two findings from twenty probes, because `lint` and `format` are answered once per language.
 
-These counts help you find your place. Treat them as an index rather than a measurement: twenty probes are not twenty points available, and a repository with more absences than another may simply be trying to do different things.
+Use these counts as an index to find your place. Each probe reports on one practice, and the practices a project needs depend on what it is for. Two repositories with different totals may simply be doing different work.
 
 ---
 
 ## **1. Open Source Baseline**
 
-Whether the repository carries what an outside contributor needs to arrive, understand the project, and contribute without asking a person first.
+Whether the repository carries what an outside contributor needs. Someone who has never met you should be able to understand the project and open a pull request without asking a person first.
 
 * **`practice.readme`** — **present**. `README.md`
 * **`practice.contributing`** — **present**. `CONTRIBUTING.md`
@@ -71,18 +71,18 @@ An unrecognisable licence file is a different finding from a missing one. Someon
 
 Whether a tool checks style and common errors, and whether anything makes that check run.
 
-| Probe | Language | Outcome | Evidence |
-| ----- | ----- | ----- | ----- |
-| `lint` | Python | **enforced** | `ruff` in `pyproject.toml`, run at `ci.yml:31` |
-| `lint` | JavaScript | **present** | `eslint` in `frontend/.eslintrc.json`, no CI step |
-| `format` | Python | **enforced** | `ruff format --check` at `ci.yml:35` |
-| `format` | JavaScript | **absent** | No formatter configured |
+| Probe    | Language   | Outcome      | Evidence                                          |
+| -------- | ---------- | ------------ | ------------------------------------------------- |
+| `lint`   | Python     | **enforced** | `ruff` in `pyproject.toml`, run at `ci.yml:31`    |
+| `lint`   | JavaScript | **present**  | `eslint` in `frontend/.eslintrc.json`, no CI step |
+| `format` | Python     | **enforced** | `ruff format --check` at `ci.yml:35`              |
+| `format` | JavaScript | **absent**   | No formatter configured                           |
 
 ### **Two languages, two answers**
 
-This repository is Python and JavaScript, so each gets its own row, and they disagree. Python is covered. JavaScript has a linter someone configured that nothing runs, so it catches problems for whoever remembers to invoke it and nowhere else.
+This repository is Python and JavaScript, so each language gets its own row. They disagree. Python is covered. JavaScript has a linter that someone configured and nothing runs, so it catches problems only for whoever remembers to invoke it.
 
-Closing that gap costs a few lines of YAML, which makes it the cheapest real improvement available here. The guidebook calls the pattern **"Configured But Never Run"** and §5 works through it.
+Closing that gap costs a few lines of YAML. That makes it the cheapest real improvement available here. The guidebook calls the pattern **"Configured But Never Run"**, and §5 works through it.
 
 ---
 
@@ -90,17 +90,17 @@ Closing that gap costs a few lines of YAML, which makes it the cheapest real imp
 
 Which kinds of testing this project runs.
 
-| Probe | Outcome | Evidence |
-| ----- | ----- | ----- |
-| `test.unit` | **enforced** | `pytest` in `pyproject.toml`, run at `ci.yml:38` |
-| `test.integration` | **absent** | No separate job, no marked suite |
-| `test.e2e` | **absent** | No Playwright, Cypress, or Selenium |
-| `test.coverage` | **present** | `pytest-cov` declared, no CI step |
-| `test.mutation` | **absent** | No mutation testing tool |
+| Probe              | Outcome      | Evidence                                         |
+| ------------------ | ------------ | ------------------------------------------------ |
+| `test.unit`        | **enforced** | `pytest` in `pyproject.toml`, run at `ci.yml:38` |
+| `test.integration` | **absent**   | No separate job, no marked suite                 |
+| `test.e2e`         | **absent**   | No Playwright, Cypress, or Selenium              |
+| `test.coverage`    | **present**  | `pytest-cov` declared, no CI step                |
+| `test.mutation`    | **absent**   | No mutation testing tool                         |
 
 ### **Kinds, not percentages**
 
-Coverage counts lines executed rather than behaviour verified, so a module at 80% whose tests assert nothing is at 0% in every sense that matters. Naming which kinds run shows you which kind you lack, and that is actionable.
+Coverage counts lines executed. Tests that assert nothing still count toward it. Naming which kinds run shows you which kind you lack, and that is something you can act on.
 
 ### **Absence is often correct**
 
@@ -117,9 +117,9 @@ Whether code is reviewed before merging, and whether anything runs against it.
 
 ### **Protection that permits unreviewed merges**
 
-Branch protection here requires zero approving reviews, so the settings page shows a protected branch while any pull request can merge unread. Exempting administrators compounds this: on a small team that is most of the team, and the rules then describe an intention.
+Branch protection here requires zero approving reviews. The settings page shows a protected branch, and any pull request can still merge unread. Exempting administrators compounds this. On a small team that is most of the team, so the rules describe an intention.
 
-Both are settings changes rather than work. §7 covers what making them binding costs, because the answer is more than zero.
+Both are settings changes rather than work. §7 covers what making them binding costs, and there are real costs.
 
 ---
 
@@ -132,7 +132,7 @@ Both are settings changes rather than work. §7 covers what making them binding 
 
 ### **An unreadable probe describes us**
 
-`security.sast` failed on our side, and we report it that way. This repository runs a `CodeQL` workflow — visible in §4 — so SAST is probably running; we could not confirm it through this channel on this run. Rendering it as **absent** would have told the team they were missing something they had already done.
+`security.sast` failed on our side, and we report it that way. This repository runs a `CodeQL` workflow, visible in §4, so SAST is probably running. We could not confirm it through this channel on this run. Marking it **absent** would have told the team they were missing something they had already done.
 
 If an outcome in your report reads **unreadable** and you believe it is wrong, tell us. That is a bug in our tooling rather than a dispute about your codebase.
 
@@ -140,8 +140,8 @@ If an outcome in your report reads **unreadable** and you believe it is wrong, t
 
 ## **What we could not read**
 
-| Probe | Reason |
-| ----- | ----- |
+| Probe           | Reason                    |
+| --------------- | ------------------------- |
 | `security.sast` | Scorecard check timed out |
 
 One probe of twenty. A long list here, or a complete one, would mean the sweep failed rather than the repository being empty.

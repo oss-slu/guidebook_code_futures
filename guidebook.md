@@ -47,7 +47,7 @@ This matters more than what it is, because every failure mode of a document like
 
 That is a precise claim about what this report measures, and it is worth sitting with. **Not one probe in this report is a feature.** A test suite does nothing for a user. Neither does a linter, a branch protection rule, or a licence file. Every one of them is a purchase of optionality — a thing that costs a little now and determines what you can still change next semester without breaking something you cannot see.
 
-This is also why these items are so easy to postpone forever. Nothing bad happens the week you skip them. The cost arrives later, as a general feeling that the codebase has become difficult, and by then it is hard to connect to any decision anybody made.
+This is also why these items are so easy to postpone forever. Nothing bad happens the week you skip them. You pay later. It shows up as a general feeling that the codebase has become difficult, by which point no one can trace it to a decision.
 
 Naming them *futures* is an attempt to make that visible. Work on structure is not overhead. It is buying back options you would otherwise lose.
 
@@ -76,7 +76,7 @@ None of this makes the tools useless. It makes them *instruments*, and an instru
 
 **Finding what nobody has time to look for.** Nobody is going to check whether every repository has a pull request template. A tool checks in milliseconds and never finds it boring.
 
-**Precision about specific, checkable facts.** "A linter is configured here and no CI step invokes it" is exactly true, immediately actionable, and almost impossible to notice by reading code.
+**Precision about specific, checkable facts.** "A linter is configured here and no CI step invokes it" is exact, actionable, and almost impossible to spot by reading code.
 
 **Change over time is real.** Because the instrument does not drift, the difference between this month's report and last month's is a fact about the repository rather than a fact about who was reading it.
 
@@ -131,7 +131,7 @@ Two of these need argument.
 
 **`present` is not a worse `enforced`.** It is a different state, and usually a much more useful one. A repository with a complete test suite that no workflow invokes is one file away from having continuous integration. A repository with no test suite is weeks away. Collapsing those two into "doesn't have CI testing" destroys the most actionable finding this report produces — which is why the outcome is not a boolean.
 
-**`unreadable` is a statement about the tooling, not about you.** If a check timed out, a token lacked a permission, or an API returned something unexpected, the report says so rather than quietly recording an absence. This is not politeness. Reporting our failure as your deficiency would make the document untrustworthy in exactly the way that matters: you would have no way to tell a real finding from a broken probe.
+**`unreadable` describes the tooling, not you.** A check may time out, a token may lack a permission, an API may return something unexpected. The report says so rather than quietly recording an absence. This is a matter of trust rather than courtesy. Report our failures as your deficiencies, and you lose any way to tell a real finding from a broken probe.
 
 Not every probe can produce every outcome. A README cannot be **enforced**, because there is nothing for CI to run. The top rung available to a probe depends on the kind of question it is.
 
@@ -166,7 +166,7 @@ Whether the repository carries the documents an outside contributor needs.
 | `lint` | Is a linter configured, and does CI invoke it? |
 | `format` | Is a formatter configured, and does CI check formatting? |
 
-**Detection is two-layer, and the gap between the layers is the finding.** We read manifests and config files to establish what is *configured* (`[tool.ruff]`, `.eslintrc`, `checkstyle.xml`, `Cargo.toml`). We read `.github/workflows/*.yml` to establish what is *enforced* — a step that actually invokes the thing. **present** means we found the first and not the second.
+**Detection works in two layers, and the gap between them is the finding.** Manifests and config files establish what is *configured*: `[tool.ruff]`, `.eslintrc`, `checkstyle.xml`, `Cargo.toml`. Workflow files establish what is *enforced*, meaning a step that actually invokes the tool. **present** means we found the first layer and not the second.
 
 **Polyglot repositories get a row per stack.** A project that is Python and React has both a `ruff` row and an `eslint` row, and they can disagree. Several projects in this program are in exactly that position, and a single combined answer would hide which half needs attention.
 
@@ -335,7 +335,7 @@ The argument is not about discipline; it is about completion. A team that picks 
 In rough order of priority:
 
 1. **Anything with consequences outside the team.** A missing or unidentifiable licence stops other people from using your work. That is categorically different from an internal gap.
-2. **Anything that makes the next finding cheaper to fix.** Enforcing a linter before a refactor means the refactor arrives clean. Order matters more than it looks.
+2. **Anything that makes the next finding cheaper to fix.** Enforcing a linter before a refactor means the refactor starts clean. Order matters more than it looks.
 3. **The cheapest real improvement.** A **present**-to-**enforced** change is usually a few lines. Prefer finishing something.
 4. **The highest risk.** An untested module that changes every week is where a regression is actually going to come from.
 
@@ -345,7 +345,7 @@ Explicitly *not* on this list: whichever item would most improve how the report 
 
 The commonest practical obstacle to fixing **"Configured But Never Run"** is that switching the check on produces hundreds of findings across files nobody intended to touch. A pull request that reformats the entire codebase is unreviewable, conflicts with everything in flight, and buries the actual change.
 
-The standard answer is to **separate the formatting commit from the behaviour commit**, which is Kent Beck's argument in *Tidy First?* applied directly: a structural change and a behavioural change in one commit cost more to review than either costs alone.
+The standard answer is to **separate the formatting commit from the behaviour commit**. This is Kent Beck's argument in *Tidy First?*, applied directly. A structural change and a behavioural change in one commit cost more to review than either costs alone.
 
 Three widely used approaches, and they compose:
 
@@ -375,7 +375,7 @@ Compare a repository against **its own past**, not against other repositories. P
 
 ### **Getting the feedback continuously**
 
-Reports arrive periodically. The feedback is more useful when it arrives on the pull request that causes it, which is what the reusable workflow is for. A team adopts it by adding one file:
+Reports are produced periodically. Feedback is more useful attached to the pull request that caused it. That is what the reusable workflow is for. A team adopts it by adding one file:
 
 ```yaml
 # .github/workflows/code-futures.yml
@@ -396,7 +396,7 @@ jobs:
     secrets: inherit
 ```
 
-**The `permissions:` block is not optional, and omitting it is the most likely reason a first attempt fails.** A reusable workflow cannot grant itself more permission than the workflow that called it, so `security-events: write` has to be declared here, in your repository, or the security scanning job fails with an error that does not obviously point at this. Copy the whole block.
+**Copy the `permissions:` block exactly.** Omitting it is the most likely reason a first attempt fails. A reusable workflow cannot grant itself more permission than the workflow calling it. So `security-events: write` must be declared here, in your repository. Without it the security scanning job fails, and the error does not obviously point back to this block.
 
 **Nothing in it will fail your build.** Every job is advisory by default. This is deliberate: a team whose build breaks the day they adopt a quality tool learns that quality tools are an obstacle, and they are not wrong to conclude that from the evidence available to them.
 
@@ -462,7 +462,7 @@ jobs:
     continue-on-error: true   # ← delete this line to make lint blocking
 ```
 
-**Then add the job to your branch protection's required status checks.** Without this second step the job reports a failure and the pull request merges anyway, which is the worst of both worlds: the friction of a red check with none of the protection.
+**Then add the job to your branch protection's required status checks.** Skip this second step and the job reports a failure while the pull request merges anyway. That is the worst of both worlds: the friction of a red check, none of the protection.
 
 ### **Protection that does not protect**
 
