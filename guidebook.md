@@ -44,9 +44,11 @@ This matters more than what it is, because every failure mode of a document like
 
 ### **A note on the name**
 
-"Code Futures" comes from Kent Beck's distinction, in *Tidy First?*, between the two kinds of value in software. **Features** are what the software does now. **Futures** are what remains possible later. Behaviour buys features; structure buys futures.
+"Code Futures" comes from Kent Beck's talk [*Features Versus Futures*](https://videos.itrevolution.com/watch/1183714411/), where he argues that every new feature spends some of a project's remaining optionality. **Features** are what the software does now. **Futures** are what remains possible later. Behaviour buys features; structure buys futures.
 
-That is a precise claim about what this report measures, and it is worth sitting with. **Not one probe in this report is a feature.** A test suite does nothing for a user. Neither does a linter, a branch protection rule, or a licence file. Every one of them is a purchase of optionality — a thing that costs a little now and determines what you can still change next semester without breaking something you cannot see.
+The argument underneath is developed at length in his *Tidy First?*, in different words: there the distinction is between **structure** and **behaviour**, and the case is economic. Behaviour creates value today. Structure creates no value at all by itself, and creates options for tomorrow.
+
+That is a precise claim about what this report measures, and it is worth sitting with. **Not one probe in this report is a feature.** A test suite does nothing for a user. Neither does a linter, a branch protection rule, or a licence file. Every one of them is a purchase of optionality — a thing that costs a little now and determines what you can still change later without breaking something you cannot see.
 
 This is also why these items are so easy to postpone forever. Nothing bad happens the week you skip them. You pay later. It shows up as a general feeling that the codebase has become difficult, by which point no one can trace it to a decision.
 
@@ -625,7 +627,8 @@ A sensible sequence: run the automated report first, read it to find where to lo
 
 ### **On the ideas**
 
-* Kent Beck, *Tidy First?* — features versus futures, and the argument for separating structural changes from behavioural ones. This guidebook's title and its central frame both come from here
+* Kent Beck, [*Features Versus Futures*](https://videos.itrevolution.com/watch/1183714411/) (2026) — the talk this guidebook takes its frame and its title from
+* Kent Beck, *Tidy First?* — the same argument developed at book length as structure against behaviour, plus the economics of optionality, the coupling and cohesion definitions §1 measures, and the case for separating structural commits from behavioural ones
 * Michael Feathers, *Working Effectively with Legacy Code* — the source of "legacy code is simply code without tests", and the practical answer to an inherited codebase with no safety net
 * Nicole Forsgren, Jez Humble and Gene Kim, *Accelerate* — the empirical case that these practices correlate with delivery performance, which is the evidence behind treating any of this as more than preference
 * Martin Fowler, *Refactoring* — the catalogue of named code smells that most static analysis rules are ultimately derived from
