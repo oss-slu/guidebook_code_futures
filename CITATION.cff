@@ -1,0 +1,84 @@
+cff-version: 1.2.0
+title: "Code Futures: Reading Automated Analysis of Your Codebase"
+message: "If you cite or adapt this guidebook, please use the preferred citation below."
+abstract: >-
+  A guidebook on what automated analysis of a codebase can and cannot see.
+  It uses the Code Futures report as its worked example, but its subject is
+  the judgement rather than the format: what a tool's output is evidence of,
+  what it would be wrong to conclude, how to choose one thing to change, and
+  where automated signal ends and human assessment has to begin. Written for
+  student tech leads and developers, for faculty running similar programs,
+  and for other institutions.
+authors:
+  - given-names: Daniel
+    family-names: Shown
+    orcid: "https://orcid.org/0009-0002-5716-8835"
+    affiliation: Saint Louis University
+repository-code: "https://github.com/oss-slu/guidebook_code_futures"
+url: "https://github.com/oss-slu/guidebook_code_futures"
+license: CC-BY-NC-SA-4.0
+version: "1.0.0"
+date-released: "2026-10-30"
+keywords:
+  - software quality
+  - technical debt
+  - static analysis
+  - computing education
+  - open source program office
+
+# This repository is prose, not software, and CFF's top-level schema assumes
+# software. `preferred-citation` carries the full reference vocabulary, so it
+# is where the citation can say what this actually is: a manual.
+preferred-citation:
+  type: manual
+  title: "Code Futures: Reading Automated Analysis of Your Codebase"
+  authors:
+    - given-names: Daniel
+      family-names: Shown
+      orcid: "https://orcid.org/0009-0002-5716-8835"
+      affiliation: Saint Louis University
+  institution:
+    name: "Open Source with SLU, Saint Louis University"
+  year: 2026
+  url: "https://github.com/oss-slu/guidebook_code_futures"
+  license: CC-BY-NC-SA-4.0
+  notes: >-
+    Describes reports carrying the schema code-futures/v1.
+
+references:
+  - type: manual
+    title: "Codebase Technical Assessment: Guidebook and Rubric"
+    authors:
+      - name: "Open Source with SLU, Saint Louis University"
+    year: 2026
+    url: "https://github.com/oss-slu/guidebook_tech_debt"
+    notes: >-
+      The sibling instrument. That one is a person reading a codebase and
+      exercising judgement across seventeen dimensions; this one is about
+      automated signal and its limits. Each covers the other's blind spot.
+  - type: video
+    title: "Features Versus Futures"
+    authors:
+      - given-names: Kent
+        family-names: Beck
+    year: 2026
+    url: "https://videos.itrevolution.com/watch/1183714411/"
+    notes: "Source of the frame this guidebook is named for."
+  - type: book
+    title: "Tidy First? A Personal Exercise in Empirical Software Design"
+    authors:
+      - given-names: Kent
+        family-names: Beck
+    publisher:
+      name: O'Reilly Media
+    year: 2023
+    isbn: "9781098151249"
+  - type: book
+    title: "Your Code as a Crime Scene"
+    authors:
+      - given-names: Adam
+        family-names: Tornhill
+    publisher:
+      name: Pragmatic Bookshelf
+    year: 2015
+    isbn: "9781680500387"
