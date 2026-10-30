@@ -22,6 +22,40 @@ This guidebook is about what automated analysis of a codebase can and cannot see
 
 **Schema version.** This guidebook describes reports carrying the schema `code-futures/v1`. Your report states its schema in the header. If those two do not match, trust the report and [tell us](https://github.com/oss-slu/guidebook_code_futures/issues) — a mismatch is our problem to fix, not a puzzle for you to solve.
 
+
+## **Contents**
+
+Eight sections, about 8,000 words. **You are not meant to read it straight through.**
+
+| | | |
+|---|---|---|
+| **[1. Introduction](#1-introduction)** | 500 words | What the report is, and the five things it is not |
+| **[2. What Automated Analysis Can and Cannot See](#2-what-automated-analysis-can-and-cannot-see)** | 1,000 | The argument the rest rests on. **Read this one properly** |
+| **[3. Reading Your Report](#3-reading-your-report)** | 3,500 | Reference. Look up the finding in front of you; do not read it end to end |
+| **[4. Common Patterns and What They Mean](#4-common-patterns-and-what-they-mean)** | 500 | Currently a stub, and says so |
+| **[5. From Findings to Change](#5-from-findings-to-change)** | 550 | How to pick one thing, and why one |
+| **[6. Continuous Improvement](#6-continuous-improvement)** | 600 | Cadence, adopting the CI, and when to stop |
+| **[7. Making Checks Blocking](#7-making-checks-blocking)** | 550 | The trade-off, and how, when you decide to |
+| **[8. Where to Go Deeper](#8-where-to-go-deeper)** | 450 | The human instrument, and the reading |
+
+### **If you have twenty minutes**
+
+Read **§2**, then open your report beside **§3** and look up only the findings you actually have. That is the whole document's value in a fraction of its length.
+
+### **Looking up one finding**
+
+§3 is a reference section, and it is nearly half the guidebook because it covers every probe. Jump straight to the part of your report you are holding:
+
+* [The four outcomes](#the-four-outcomes) — `enforced`, `present`, `absent`, `unreadable`, and why the last one is about us
+* [Why there are no ratings, stars, or colours](#why-there-are-no-ratings-stars-or-colours)
+* [Section 1 — Structure](#section-1--structure) — hotspots, change coupling, cohesion, blast radius, tidy-first
+* [Section 2 — Open Source Baseline](#section-2--open-source-baseline)
+* [Section 3 — Linting and Formatting](#section-3--linting-and-formatting)
+* [Section 4 — Testing](#section-4--testing)
+* [Section 5 — Review and Integration](#section-5--review-and-integration)
+* [Section 6 — Security and Dependencies](#section-6--security-and-dependencies)
+* [Section 7 — Code Quality Analysis](#section-7--code-quality-analysis)
+
 ---
 
 ## **1. Introduction**
