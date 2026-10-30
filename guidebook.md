@@ -13,6 +13,7 @@ This guidebook is about what automated analysis of a codebase can and cannot see
 **What You'll Learn:**
 
 * What automated analysis establishes, and what it only appears to establish
+* How to read change coupling and hotspots, and what they say about where your boundaries are
 * How to read each finding in a Code Futures report, including what it does not mean
 * Why `present` and `enforced` are different, and why that gap is the most useful finding you will get
 * How to choose one thing to change, and why one
@@ -29,7 +30,7 @@ This guidebook is about what automated analysis of a codebase can and cannot see
 
 A Code Futures report asks one question about one repository: **which engineering practices are in place?** Does something lint this code. Does anything test it. Is review required before a change merges. Is there a licence somebody outside could rely on.
 
-It asks the same way every time, which is why it is worth having. One person cannot read twenty-nine codebases. A tool puts the same twenty questions to all of them in a few minutes, and that consistency is what makes the results comparable.
+It asks the same way every time, which is why it is worth having. One person cannot read twenty-nine codebases. A tool puts the same questions to all of them in a few minutes, and that consistency is what makes the results comparable.
 
 ### **What the report is not**
 
@@ -70,9 +71,15 @@ Confident output in consistent units reads as objective whether or not it is. Bu
 
 None of this makes the tools useless. It makes them *instruments*, and an instrument is only as good as your understanding of what it is measuring.
 
+**A measurement is not a score.** This distinction does most of the work in the rest of the guidebook, so it is worth stating plainly. "62% of lines were executed by the test suite" is data: it has units, a method, and a population. "Your testing is a C" is a judgement, arrived at by collapsing data against a threshold somebody chose. The first is something you can reason about and argue with. The second has already done your thinking for you, usually badly, and the reasoning is not shown.
+
+Your report carries plenty of numbers. None of them is collapsed into a verdict, and the reason you are given the measurement rather than the grade is so that you can do the collapsing yourself, knowingly, in the context only you have.
+
+Two numbers are withheld, and the reasons are different from each other. We do not carry the OpenSSF Scorecard's 0–10 aggregate because it is **calibrated for a different population** — widely-depended-upon libraries, scored partly on fuzzing and signed releases. Running it on a one-semester project does not give you a weak signal; it gives you a measurement of something else wearing a familiar label. And we do not carry a maintainability letter grade, because a letter is precisely the collapse this section is about.
+
 ### **What it genuinely does well**
 
-**Consistency at a scale no person can match.** Twenty-nine repositories, the same twenty questions, no fatigue and no favourites. A human reviewer on repository nineteen is not the same reviewer who looked at repository two.
+**Consistency at a scale no person can match.** Twenty-nine repositories, the same questions every time, no fatigue and no favourites. A human reviewer on repository nineteen is not the same reviewer who looked at repository two.
 
 **Finding what nobody has time to look for.** Nobody is going to check whether every repository has a pull request template. A tool checks in milliseconds and never finds it boring.
 
@@ -141,7 +148,51 @@ You will notice the report uses plain words rather than ✅ / ⚠️ / 🔴 mark
 
 Those three marks mean something specific in this program: they are the levels of the *Codebase Technical Assessment Rubric* — Established, Emerging, Needs Attention. That rubric is a **human** instrument, applied by a person exercising judgement over seventeen dimensions. Borrowing its visual language for automated output would invite you to read a probe outcome as a rubric rating. The two make different claims: one says "a file exists", the other says "a person assessed this and formed a view".
 
-### **Section 1 — Open Source Baseline**
+### **Section 1 — Structure**
+
+| Probe | Asks |
+| ----- | ----- |
+| `structure.hotspots` | Where do complexity and change frequency concentrate? |
+| `structure.change_coupling` | Which files keep changing together? |
+| `structure.untested_modules` | Which frequently-changed modules have no tests? |
+| `structure.duplication` | How much logic is duplicated? |
+| `structure.complexity` | Which files carry the most cognitive complexity? |
+
+**This is the only section about your code.** Every other section describes the process around it — whether a linter runs, whether review is required, whether a licence exists. Useful, and all of it could be perfect in a project that is painful to change. This section is the one that looks at the shape of the thing you are building.
+
+#### **Change coupling, and why it beats counting imports**
+
+Two files that keep changing together are coupled, whether or not either imports the other.
+
+That is Kent Beck's definition made measurable. Coupling is *the probability that changing one element forces you to change another*, and your git history is a record of how often that actually happened. A dependency graph tells you what the code says it depends on; co-change tells you what it really depends on. They are frequently different, and where they differ the history is right.
+
+A static analyser cannot see this at all. Two files in different languages, in different directories, with no import between them, that change together in four commits out of five, are as coupled as anything in your system.
+
+Not all coupling is a problem, and the report does not pretend otherwise:
+
+* A test file changing with the module it tests is coupling working as intended
+* A model and its migration changing together is structural and unavoidable
+* A route handler changing every time a database model changes is a leak — the boundary between those layers is not holding
+* Two unrelated features changing together usually means a shared utility that has become a dumping ground
+
+**The question to ask of each pair is whether you would choose that relationship.** Where the answer is no, you have found a boundary in the wrong place, and the report has told you where to put the refactor.
+
+#### **Hotspots, and the thing to do about one**
+
+A hotspot is complexity multiplied by change frequency. Both halves matter. Complicated code nobody touches costs you nothing until you touch it, and simple code that changes daily is fine. The expensive intersection is code that is both hard to understand and constantly being changed, because every change there is a chance to get it wrong.
+
+Complexity is approximated by indentation depth rather than by parsing each language. That is an approximation and you should treat it as one — it is a direction to look, not a measurement of quality. It does work identically across every language, which is what makes hotspots comparable inside a polyglot repository.
+
+**A hotspot with no tests is the combination worth acting on first.** The code most likely to break, with the least protection while you change it. If your report shows a file in both `structure.hotspots` and `structure.untested_modules`, start there.
+
+#### **What this section cannot tell you**
+
+* **Whether a hotspot should be complex.** Some problems are genuinely hard, and a parser or a scheduler may be the most complicated file in the project for good reason.
+* **Why two files are coupled.** It gives you the pair, not the cause.
+* **Whether your architecture is right.** Change coupling finds boundaries that leak. It has no opinion about whether you chose the right boundaries in the first place, and that question needs a person — see §8.
+* **Anything useful on a very short history.** Hotspot ranking on a project with a few dozen commits mostly reports that recently-written files were recently written. Your report says so when that applies. Change coupling holds up better: which files change together is visible after one semester.
+
+### **Section 2 — Open Source Baseline**
 
 Whether the repository carries the documents an outside contributor needs.
 
@@ -159,7 +210,7 @@ Whether the repository carries the documents an outside contributor needs.
 
 **The licence probe has an extra state worth understanding.** A licence file that exists but cannot be matched against any OSI-approved licence reads as **present**, with the detail saying so. That is a genuinely different finding from having no licence. Somebody decided this project should be licensed; what is missing is the part that makes the decision legible to a machine, a contributor, or a lawyer. The usual cause is a licence that was retyped or truncated. It is ten minutes to fix and it is worth fixing, because a public repository nobody can safely reuse is not yet open source in the way that counts.
 
-### **Section 2 — Linting and Formatting**
+### **Section 3 — Linting and Formatting**
 
 | Probe | Asks |
 | ----- | ----- |
@@ -172,7 +223,7 @@ Whether the repository carries the documents an outside contributor needs.
 
 **What it does not mean.** An enforced linter says a linter ran. It says nothing about which rules are switched on. A configuration that disables every rule it finds inconvenient is **enforced** and is doing very little. The tool cannot tell the difference, and this is one of the easier places to be accidentally dishonest with yourself.
 
-### **Section 3 — Testing**
+### **Section 4 — Testing**
 
 | Probe | Detected by |
 | ----- | ----- |
@@ -188,7 +239,7 @@ Whether the repository carries the documents an outside contributor needs.
 
 **Absent is frequently correct.** Four of five kinds absent is an ordinary reading for a young project, and often the right one. End-to-end tests on a service with no user-facing flows are scaffolding for something that is going to be rewritten. This section reports which kinds run, not which kinds should.
 
-### **Section 4 — Review and Integration**
+### **Section 5 — Review and Integration**
 
 | Probe | Asks |
 | ----- | ----- |
@@ -199,7 +250,7 @@ Whether the repository carries the documents an outside contributor needs.
 
 **What it does not mean.** Required review proves a review was requested, not that a review happened. An approval nine seconds after a pull request opens counts identically to a careful read. No tool in this report distinguishes them, and only the team knows which is happening.
 
-### **Section 5 — Security and Dependencies**
+### **Section 6 — Security and Dependencies**
 
 | Probe | Asks |
 | ----- | ----- |
@@ -227,7 +278,7 @@ One check is excluded for a related reason: `Maintained` scores activity in the 
 
 Six of the Scorecard checks are not used at all, and the reasons are worth knowing because they are the same reasons you should be careful with any tool's output. Two report the *presence of a defect* rather than the presence of a practice, so reading them as "is this in place" inverts them. One is a proportion of recent commits rather than a state. Three ask questions we can answer better from the repository directly — the branch gate is one, where Scorecard's score flattens the difference between protection that requires a review and protection that requires zero.
 
-### **Section 6 — Code Quality Analysis**
+### **Section 7 — Code Quality Analysis**
 
 | Probe | Asks |
 | ----- | ----- |
