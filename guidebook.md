@@ -157,6 +157,9 @@ Those three marks mean something specific in this program: they are the levels o
 | `structure.untested_modules` | Which frequently-changed modules have no tests? |
 | `structure.duplication` | How much logic is duplicated? |
 | `structure.complexity` | Which files carry the most cognitive complexity? |
+| `structure.cohesion` | How much coupling crosses a module boundary? |
+| `structure.blast_radius` | How many files does a typical change touch, and the worst ones? |
+| `structure.tidy_first` | Where would tidying pay off soonest? |
 
 **This is the only section about your code.** Every other section describes the process around it — whether a linter runs, whether review is required, whether a licence exists. Useful, and all of it could be perfect in a project that is painful to change. This section is the one that looks at the shape of the thing you are building.
 
@@ -185,12 +188,60 @@ Complexity is approximated by indentation depth rather than by parsing each lang
 
 **A hotspot with no tests is the combination worth acting on first.** The code most likely to break, with the least protection while you change it. If your report shows a file in both `structure.hotspots` and `structure.untested_modules`, start there.
 
+#### **Cohesion, which is the same measurement read differently**
+
+Beck's formulation is that cohesion is coupling put in the right place: things that change together should be *together*. So one number answers two questions depending on where the pair sits.
+
+A coupled pair inside one module is cohesion working, and wants nothing from you. A coupled pair spanning two modules is a boundary that is not holding, and every change has to cross it — a context switch, a second review, and a chance to update one side and miss the other.
+
+Three questions when you find one, in order:
+
+* **Does the dependency run the direction you intended?** A model that changes whenever a route changes is upside down.
+* **Should one of these files move?** Sometimes the boundary is right and the file is on the wrong side of it.
+* **Is there a third thing?** Two modules reaching for the same concept, neither owning it, is the commonest cause and the one that stays hidden longest.
+
+#### **Blast radius, and why the median is the boring half**
+
+Beck's argument about cost runs as a chain, and it is worth following because it explains why any of this matters commercially rather than aesthetically:
+
+> The cost of software is the cost of changing it. The cost of changing it is dominated by the **expensive** changes rather than the average one. And coupling is what makes a change expensive.
+
+So the measurement that matters is the *gap* between your typical change and your largest tenth. A codebase where most changes touch two files and the worst touch twenty has somewhere that twenty-file changes come from, and your report names the files that keep showing up in them.
+
+This is also the number that moves when structural work pays off. Coupling falls, large changes get smaller, and the tail comes in. It is the closest thing here to a measurement of whether a refactor worked.
+
+#### **"Tidy First?" — the question mark is the point**
+
+Beck's title is a question, and the answer is frequently no. Tidying pays off when it makes a change you are **about to make** easier. Tidying you will not cash in soon is cost without return, and a report that lists every structural weakness invites precisely the reading he argues against: that all of it should be fixed.
+
+`structure.tidy_first` is not the worst file in your repository. It is the file where tidying would pay back soonest — you are already in it regularly, it is expensive to work in, and the report says which of those apply.
+
+Two pieces of practice that go with it:
+
+* **Separate the tidying commit from the behaviour commit.** A structural change and a behavioural change reviewed together cost more than either reviewed alone. This is the central discipline of the book and the cheapest to adopt.
+* **Check whether it paid.** If the next change to that area is easier than the last one was, it did. If you tidied something you then did not touch for a month, it did not — worth noticing rather than repeating.
+
 #### **What this section cannot tell you**
 
 * **Whether a hotspot should be complex.** Some problems are genuinely hard, and a parser or a scheduler may be the most complicated file in the project for good reason.
 * **Why two files are coupled.** It gives you the pair, not the cause.
 * **Whether your architecture is right.** Change coupling finds boundaries that leak. It has no opinion about whether you chose the right boundaries in the first place, and that question needs a person — see §8.
 * **Anything useful on a very short history.** Hotspot ranking on a project with a few dozen commits mostly reports that recently-written files were recently written. Your report says so when that applies. Change coupling holds up better: which files change together is visible after one semester.
+
+**One caveat applies to every figure in this section. Coupling is contextual.** Beck is explicit about this, and it is easy to forget once a number exists. Two elements coupled with respect to one kind of change may be completely independent with respect to another. The figures here aggregate across every change in your history, so they cannot tell you *which* kind of change is costing you. You can, and that is the conversation the section is for.
+
+#### **What to look at by hand**
+
+Your report closes this section with a list of structural questions no tool answers, and it is there because those questions are not less important than the measured ones — they are harder, which is a different thing.
+
+* **Is the domain model right?** The most expensive mistakes in software are conceptual: the wrong abstraction, a boundary that does not match the problem.
+* **Does the dependency direction match the design?** Coupling shows which files change together, never which *should* depend on which.
+* **Is there duplicated concept rather than duplicated text?** Two implementations of one idea, written differently, are invisible to a duplication detector and cost more than copy-paste does.
+* **Do the tests assert anything?**
+* **Is a hotspot complex for a good reason?** Some problems are hard.
+* **Is there dead code?** Detectable per language, and we do not yet run those tools.
+
+The *Codebase Technical Assessment Guidebook and Rubric* is the instrument for this pass. Section 8 covers how the two fit together.
 
 ### **Section 2 — Open Source Baseline**
 
