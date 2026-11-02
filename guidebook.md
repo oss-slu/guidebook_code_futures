@@ -22,6 +22,49 @@ This guidebook is about what automated analysis of a codebase can and cannot see
 
 **Schema version.** This guidebook describes reports carrying the schema `code-futures/v1`. Your report states its schema in the header. If those two do not match, trust the report and [tell us](https://github.com/oss-slu/guidebook_code_futures/issues) — a mismatch is our problem to fix, not a puzzle for you to solve.
 
+
+## **Contents**
+
+Eight sections, about 8,000 words. **You are not meant to read it straight through.**
+
+|                                                         |           |                                                          |
+| ------------------------------------------------------- | --------- | -------------------------------------------------------- |
+| **[1. Introduction][s1]**                               | 500 words | What the report is, and what it is not                   |
+| **[2. What Automated Analysis Can and Cannot See][s2]** | 1,000     | The argument the rest rests on. **Read this one**        |
+| **[3. Reading Your Report][s3]**                        | 3,500     | Reference. Look up what you have; do not read it through |
+| **[4. Common Patterns and What They Mean][s4]**         | 500       | A stub, and says so                                      |
+| **[5. From Findings to Change][s5]**                    | 550       | Picking one thing, and why one                           |
+| **[6. Continuous Improvement][s6]**                     | 600       | Cadence, adopting the CI, when to stop                   |
+| **[7. Making Checks Blocking][s7]**                     | 550       | The trade-off, and how                                   |
+| **[8. Where to Go Deeper][s8]**                         | 450       | The human instrument, and the reading                    |
+
+[s1]: #1-introduction
+[s2]: #2-what-automated-analysis-can-and-cannot-see
+[s3]: #3-reading-your-report
+[s4]: #4-common-patterns-and-what-they-mean
+[s5]: #5-from-findings-to-change
+[s6]: #6-continuous-improvement
+[s7]: #7-making-checks-blocking
+[s8]: #8-where-to-go-deeper
+
+### **If you have twenty minutes**
+
+Read **§2**, then open your report beside **§3** and look up only the findings you actually have. That is the whole document's value in a fraction of its length.
+
+### **Looking up one finding**
+
+§3 is a reference section, and it is nearly half the guidebook because it covers every probe. Jump straight to the part of your report you are holding:
+
+* [The four outcomes](#the-four-outcomes) — `enforced`, `present`, `absent`, `unreadable`, and why the last one is about us
+* [Why there are no ratings, stars, or colours](#why-there-are-no-ratings-stars-or-colours)
+* [Section 1 — Structure](#section-1--structure) — hotspots, change coupling, cohesion, blast radius, tidy-first
+* [Section 2 — Open Source Baseline](#section-2--open-source-baseline)
+* [Section 3 — Linting and Formatting](#section-3--linting-and-formatting)
+* [Section 4 — Testing](#section-4--testing)
+* [Section 5 — Review and Integration](#section-5--review-and-integration)
+* [Section 6 — Security and Dependencies](#section-6--security-and-dependencies)
+* [Section 7 — Code Quality Analysis](#section-7--code-quality-analysis)
+
 ---
 
 ## **1. Introduction**
@@ -129,12 +172,12 @@ A worked example report accompanies this guidebook as [`worked-example-report.md
 
 Every finding in the report is one of four values. This is a vocabulary, not a scale: there is no arithmetic you can do on it.
 
-| Outcome | Means | Who it is about |
-| ----- | ----- | ----- |
-| **enforced** | In place, *and* something in CI runs it | the repository |
-| **present** | In the repository, but nothing runs it automatically | the repository |
-| **absent** | We looked, and it is not there | the repository |
-| **unreadable** | We could not find out | **us** |
+| Outcome        | Means                                                | Who it is about |
+| -------------- | ---------------------------------------------------- | --------------- |
+| **enforced**   | In place, *and* something in CI runs it              | the repository  |
+| **present**    | In the repository, but nothing runs it automatically | the repository  |
+| **absent**     | We looked, and it is not there                       | the repository  |
+| **unreadable** | We could not find out                                | **us**          |
 
 Two of these need argument.
 
@@ -152,16 +195,16 @@ Those three marks mean something specific in this program: they are the levels o
 
 ### **Section 1 — Structure**
 
-| Probe | Asks |
-| ----- | ----- |
-| `structure.hotspots` | Where do complexity and change frequency concentrate? |
-| `structure.change_coupling` | Which files keep changing together? |
-| `structure.untested_modules` | Which frequently-changed modules have no tests? |
-| `structure.duplication` | How much logic is duplicated? |
-| `structure.complexity` | Which files carry the most cognitive complexity? |
-| `structure.cohesion` | How much coupling crosses a module boundary? |
-| `structure.blast_radius` | How many files does a typical change touch, and the worst ones? |
-| `structure.tidy_first` | Where would tidying pay off soonest? |
+| Probe                        | Asks                                                            |
+| ---------------------------- | --------------------------------------------------------------- |
+| `structure.hotspots`         | Where do complexity and change frequency concentrate?           |
+| `structure.change_coupling`  | Which files keep changing together?                             |
+| `structure.untested_modules` | Which frequently-changed modules have no tests?                 |
+| `structure.duplication`      | How much logic is duplicated?                                   |
+| `structure.complexity`       | Which files carry the most cognitive complexity?                |
+| `structure.cohesion`         | How much coupling crosses a module boundary?                    |
+| `structure.blast_radius`     | How many files does a typical change touch, and the worst ones? |
+| `structure.tidy_first`       | Where would tidying pay off soonest?                            |
 
 **This is the only section about your code.** Every other section describes the process around it — whether a linter runs, whether review is required, whether a licence exists. Useful, and all of it could be perfect in a project that is painful to change. This section is the one that looks at the shape of the thing you are building.
 
@@ -249,15 +292,15 @@ The *Codebase Technical Assessment Guidebook and Rubric* is the instrument for t
 
 Whether the repository carries the documents an outside contributor needs.
 
-| Probe | Asks |
-| ----- | ----- |
-| `practice.readme` | Is there a README? |
-| `practice.contributing` | Is there a contributing guide? |
-| `practice.code_of_conduct` | Is there a code of conduct? |
-| `practice.license` | Is there a licence, and is it an identifiable one? |
-| `practice.issue_template` | Is there an issue template? |
-| `practice.pull_request_template` | Is there a pull request template? |
-| `practice.security_policy` | Is there a `SECURITY.md`? |
+| Probe                            | Asks                                               |
+| -------------------------------- | -------------------------------------------------- |
+| `practice.readme`                | Is there a README?                                 |
+| `practice.contributing`          | Is there a contributing guide?                     |
+| `practice.code_of_conduct`       | Is there a code of conduct?                        |
+| `practice.license`               | Is there a licence, and is it an identifiable one? |
+| `practice.issue_template`        | Is there an issue template?                        |
+| `practice.pull_request_template` | Is there a pull request template?                  |
+| `practice.security_policy`       | Is there a `SECURITY.md`?                          |
 
 **What it does not mean.** A present README is not a good README. This is pure presence detection: the tool opens no file and reads no prose. A repository can score perfectly here and have documentation that helps nobody.
 
@@ -265,9 +308,9 @@ Whether the repository carries the documents an outside contributor needs.
 
 ### **Section 3 — Linting and Formatting**
 
-| Probe | Asks |
-| ----- | ----- |
-| `lint` | Is a linter configured, and does CI invoke it? |
+| Probe    | Asks                                                     |
+| -------- | -------------------------------------------------------- |
+| `lint`   | Is a linter configured, and does CI invoke it?           |
 | `format` | Is a formatter configured, and does CI check formatting? |
 
 **Detection works in two layers, and the gap between them is the finding.** Manifests and config files establish what is *configured*: `[tool.ruff]`, `.eslintrc`, `checkstyle.xml`, `Cargo.toml`. Workflow files establish what is *enforced*, meaning a step that actually invokes the tool. **present** means we found the first layer and not the second.
@@ -278,13 +321,13 @@ Whether the repository carries the documents an outside contributor needs.
 
 ### **Section 4 — Testing**
 
-| Probe | Detected by |
-| ----- | ----- |
-| `test.unit` | A runner configured, and invoked in CI |
-| `test.integration` | A separate job, or a marked suite |
-| `test.e2e` | Playwright, Cypress, or Selenium |
-| `test.coverage` | A coverage tool wired into CI |
-| `test.mutation` | Stryker, mutmut, PIT, or cargo-mutants |
+| Probe              | Detected by                            |
+| ------------------ | -------------------------------------- |
+| `test.unit`        | A runner configured, and invoked in CI |
+| `test.integration` | A separate job, or a marked suite      |
+| `test.e2e`         | Playwright, Cypress, or Selenium       |
+| `test.coverage`    | A coverage tool wired into CI          |
+| `test.mutation`    | Stryker, mutmut, PIT, or cargo-mutants |
 
 **Coverage percentages are omitted.** Coverage counts lines executed rather than behaviour verified, so a module at 80% whose tests assert nothing is at 0% in every sense that matters. A number also invites a target, and a target invites tests written to move it. Naming which *kinds* of test run shows you which kind you lack, and that is actionable.
 
@@ -294,10 +337,10 @@ Whether the repository carries the documents an outside contributor needs.
 
 ### **Section 5 — Review and Integration**
 
-| Probe | Asks |
-| ----- | ----- |
+| Probe             | Asks                                                 |
+| ----------------- | ---------------------------------------------------- |
 | `review.required` | Does the default branch require an approving review? |
-| `ci.present` | Does any CI workflow run at all? |
+| `ci.present`      | Does any CI workflow run at all?                     |
 
 **Protection can exist and gate nothing**, and this is the trap in the section. A branch can be protected with zero required approving reviews, which shows a reassuring green state on the settings page while permitting unreviewed merges. Protection that exempts administrators is similar: the rules describe an intention rather than a constraint. Both read as **present** rather than **enforced**, and the detail line says which case you are in.
 
@@ -305,19 +348,18 @@ Whether the repository carries the documents an outside contributor needs.
 
 ### **Section 6 — Security and Dependencies**
 
-| Probe | Asks |
-| ----- | ----- |
-| `security.sast` | Does static application security testing run? |
-| `security.token_permissions` | Do workflows declare minimal permissions? |
-| `security.workflow_safety` | Are there dangerous workflow patterns? |
-| `deps.update_tool` | Is there a dependency update tool, and is it working? |
+| Probe                        | Asks                                                  |
+| ---------------------------- | ----------------------------------------------------- |
+| `security.sast`              | Does static application security testing run?         |
+| `security.token_permissions` | Do workflows declare minimal permissions?             |
+| `security.workflow_safety`   | Are there dangerous workflow patterns?                |
+| `deps.update_tool`           | Is there a dependency update tool, and is it working? |
 
-**Two different kinds of security tool appear in this program, and the difference is worth knowing** because it is a good lesson in what automation is for:
+**Two different kinds of security tool appear in this program, and the difference is worth knowing** because it is a good lesson in what automation is for.
 
-| Tool | The lesson |
-| ----- | ----- |
-| CodeQL | Some vulnerabilities are provable by machine, and deeper than a person would find by reading. Dataflow analysis can trace an injection path from a request parameter through three function calls into a query |
-| Security Hotspots | Most security work is judgement under uncertainty, and a good tool says so rather than guessing |
+**CodeQL proves things.** Some vulnerabilities are provable by machine, and deeper than a person would find by reading: dataflow analysis can trace an injection path from a request parameter, through three function calls, into a query. No amount of pattern matching finds that.
+
+**A security hotspot declines to.** Most security work is judgement under uncertainty, and a good tool says so rather than guessing. It has found the question and left the answer to you.
 
 **What it does not mean.** A clean SAST run means the analyser found nothing it knows how to find. The class of vulnerability it has no rule for is invisible, and "no findings" is not "no vulnerabilities" in any tool ever built.
 
@@ -333,11 +375,11 @@ Six of the Scorecard checks are not used at all, and the reasons are worth knowi
 
 ### **Section 7 — Code Quality Analysis**
 
-| Probe | Asks |
-| ----- | ----- |
-| `quality.project` | Is the project analysed by SonarQube Cloud? |
-| `quality.gate` | Is a quality gate defined, and does CI apply it? |
-| `quality.hotspots_reviewed` | Have flagged security hotspots been reviewed? |
+| Probe                       | Asks                                             |
+| --------------------------- | ------------------------------------------------ |
+| `quality.project`           | Is the project analysed by SonarQube Cloud?      |
+| `quality.gate`              | Is a quality gate defined, and does CI apply it? |
+| `quality.hotspots_reviewed` | Have flagged security hotspots been reviewed?    |
 
 **This section carries no grade.** SonarQube Cloud produces a maintainability rating, a reliability rating, and issue counts. None of them appear in your report, because a letter grade is a vendor's model rendered as a letter, and this report describes which practices are in place. What it records is whether the analysis runs and whether anyone has acted on what it flags.
 
@@ -554,12 +596,12 @@ Every Code Futures job is advisory. The guidance below is for a team that has de
 
 This is a place where the field genuinely disagrees, so it would be wrong to present an answer as settled. "Run a linter in continuous integration" is settled practice. "Block merges on linter failures" is a real trade-off, and which side you land on depends on things this guidebook does not know about your project.
 
-| Blocking buys you | Blocking costs you |
-| ----- | ----- |
-| The standard is actually maintained, not just documented | A failing check stops work that may be unrelated to it |
-| No "we'll fix it later" backlog, because later is now | Pressure to disable the check under deadline, which is worse than never having it |
-| Contributors learn the standard from the tool, not from review comments | Flaky checks destroy trust in all checks, quickly |
-| Review conversations are about design rather than style | Small teams can be blocked by one unavailable reviewer |
+| Blocking buys you                               | Blocking costs you                       |
+| ----------------------------------------------- | ---------------------------------------- |
+| The standard is maintained, not just documented | A failing check stops unrelated work     |
+| No "we'll fix it later" backlog                 | Pressure to disable it under deadline    |
+| Contributors learn it from the tool, not review | Flaky checks destroy trust in all checks |
+| Review discusses design rather than style       | A small team waits on one reviewer       |
 
 A team shipping its first feature for a client has different constraints from a team maintaining a system with external users, and the right answer differs.
 
@@ -609,13 +651,13 @@ The **Codebase Technical Assessment Guidebook and Rubric** ([`oss-slu/guidebook_
 
 The two cover each other's blind spots, and the division is clean:
 
-| Automated analysis | Human assessment |
-| ----- | ----- |
+| Automated analysis                                                 | Human assessment                     |
+| ------------------------------------------------------------------ | ------------------------------------ |
 | Finds every repository without branch protection in under a minute | Finds that the domain model is wrong |
-| Same yardstick across every project, no fatigue | Adapts the question to the project |
-| Cannot tell whether a test asserts anything | Reads the test |
-| Says where risk concentrates | Says why, and what to do about it |
-| Cheap enough to run weekly | Worth a half-day, a few times a year |
+| Same yardstick across every project, no fatigue                    | Adapts the question to the project   |
+| Cannot tell whether a test asserts anything                        | Reads the test                       |
+| Says where risk concentrates                                       | Says why, and what to do about it    |
+| Cheap enough to run weekly                                         | Worth a half-day, a few times a year |
 
 A sensible sequence: run the automated report first, read it to find where to look, then use the rubric where the report says something interesting or says nothing at all.
 
