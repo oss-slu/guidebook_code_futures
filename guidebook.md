@@ -27,16 +27,25 @@ This guidebook is about what automated analysis of a codebase can and cannot see
 
 Eight sections, about 8,000 words. **You are not meant to read it straight through.**
 
-|                                                                                                    |           |                                                                           |
-| -------------------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------- |
-| **[1. Introduction](#1-introduction)**                                                             | 500 words | What the report is, and the five things it is not                         |
-| **[2. What Automated Analysis Can and Cannot See](#2-what-automated-analysis-can-and-cannot-see)** | 1,000     | The argument the rest rests on. **Read this one properly**                |
-| **[3. Reading Your Report](#3-reading-your-report)**                                               | 3,500     | Reference. Look up the finding in front of you; do not read it end to end |
-| **[4. Common Patterns and What They Mean](#4-common-patterns-and-what-they-mean)**                 | 500       | Currently a stub, and says so                                             |
-| **[5. From Findings to Change](#5-from-findings-to-change)**                                       | 550       | How to pick one thing, and why one                                        |
-| **[6. Continuous Improvement](#6-continuous-improvement)**                                         | 600       | Cadence, adopting the CI, and when to stop                                |
-| **[7. Making Checks Blocking](#7-making-checks-blocking)**                                         | 550       | The trade-off, and how, when you decide to                                |
-| **[8. Where to Go Deeper](#8-where-to-go-deeper)**                                                 | 450       | The human instrument, and the reading                                     |
+|                                                         |           |                                                          |
+| ------------------------------------------------------- | --------- | -------------------------------------------------------- |
+| **[1. Introduction][s1]**                               | 500 words | What the report is, and what it is not                   |
+| **[2. What Automated Analysis Can and Cannot See][s2]** | 1,000     | The argument the rest rests on. **Read this one**        |
+| **[3. Reading Your Report][s3]**                        | 3,500     | Reference. Look up what you have; do not read it through |
+| **[4. Common Patterns and What They Mean][s4]**         | 500       | A stub, and says so                                      |
+| **[5. From Findings to Change][s5]**                    | 550       | Picking one thing, and why one                           |
+| **[6. Continuous Improvement][s6]**                     | 600       | Cadence, adopting the CI, when to stop                   |
+| **[7. Making Checks Blocking][s7]**                     | 550       | The trade-off, and how                                   |
+| **[8. Where to Go Deeper][s8]**                         | 450       | The human instrument, and the reading                    |
+
+[s1]: #1-introduction
+[s2]: #2-what-automated-analysis-can-and-cannot-see
+[s3]: #3-reading-your-report
+[s4]: #4-common-patterns-and-what-they-mean
+[s5]: #5-from-findings-to-change
+[s6]: #6-continuous-improvement
+[s7]: #7-making-checks-blocking
+[s8]: #8-where-to-go-deeper
 
 ### **If you have twenty minutes**
 
@@ -163,12 +172,12 @@ A worked example report accompanies this guidebook as [`worked-example-report.md
 
 Every finding in the report is one of four values. This is a vocabulary, not a scale: there is no arithmetic you can do on it.
 
-| Outcome | Means | Who it is about |
-| ----- | ----- | ----- |
-| **enforced** | In place, *and* something in CI runs it | the repository |
-| **present** | In the repository, but nothing runs it automatically | the repository |
-| **absent** | We looked, and it is not there | the repository |
-| **unreadable** | We could not find out | **us** |
+| Outcome        | Means                                                | Who it is about |
+| -------------- | ---------------------------------------------------- | --------------- |
+| **enforced**   | In place, *and* something in CI runs it              | the repository  |
+| **present**    | In the repository, but nothing runs it automatically | the repository  |
+| **absent**     | We looked, and it is not there                       | the repository  |
+| **unreadable** | We could not find out                                | **us**          |
 
 Two of these need argument.
 
@@ -186,16 +195,16 @@ Those three marks mean something specific in this program: they are the levels o
 
 ### **Section 1 — Structure**
 
-| Probe | Asks |
-| ----- | ----- |
-| `structure.hotspots` | Where do complexity and change frequency concentrate? |
-| `structure.change_coupling` | Which files keep changing together? |
-| `structure.untested_modules` | Which frequently-changed modules have no tests? |
-| `structure.duplication` | How much logic is duplicated? |
-| `structure.complexity` | Which files carry the most cognitive complexity? |
-| `structure.cohesion` | How much coupling crosses a module boundary? |
-| `structure.blast_radius` | How many files does a typical change touch, and the worst ones? |
-| `structure.tidy_first` | Where would tidying pay off soonest? |
+| Probe                        | Asks                                                            |
+| ---------------------------- | --------------------------------------------------------------- |
+| `structure.hotspots`         | Where do complexity and change frequency concentrate?           |
+| `structure.change_coupling`  | Which files keep changing together?                             |
+| `structure.untested_modules` | Which frequently-changed modules have no tests?                 |
+| `structure.duplication`      | How much logic is duplicated?                                   |
+| `structure.complexity`       | Which files carry the most cognitive complexity?                |
+| `structure.cohesion`         | How much coupling crosses a module boundary?                    |
+| `structure.blast_radius`     | How many files does a typical change touch, and the worst ones? |
+| `structure.tidy_first`       | Where would tidying pay off soonest?                            |
 
 **This is the only section about your code.** Every other section describes the process around it — whether a linter runs, whether review is required, whether a licence exists. Useful, and all of it could be perfect in a project that is painful to change. This section is the one that looks at the shape of the thing you are building.
 
