@@ -677,6 +677,68 @@ A sensible sequence: run the automated report first, read it to find where to lo
 
 ---
 
+## **Glossary**
+
+The report carries a short version of this — five terms, enough to read it. This is the full vocabulary, including the words this guidebook uses in a particular sense.
+
+### **Outcomes**
+
+* **enforced** — The practice is in place, and something in CI runs it
+* **present** — It is in the repository, and nothing runs it automatically. Not a worse `enforced` — usually the more actionable finding, because closing the gap is a few lines of YAML
+* **absent** — We looked, and it is not there. Frequently correct rather than a gap
+* **unreadable** — We could not establish it. Describes our tooling, never your repository, and never counted against you
+
+### **Structure**
+
+* **Change coupling** — How often two files change in the same commit, as a share of commits touching either. Kent Beck's definition of coupling, measured from history rather than inferred from imports
+* **Cohesion** — Whether coupling sits inside a module or crosses between two. Coupling put in the right place: things that change together should be together
+* **Hotspot** — A file where change frequency and complexity both concentrate. Neither alone is expensive; the intersection is
+* **Blast radius** — How many files a change touches. The gap between the typical change and the largest tenth is what a change actually costs you
+* **Complexity** — Approximated by indentation depth, which works identically in every language. A direction to look, not a measurement of quality
+* **Tidying** — A small structural change that alters no behaviour. Beck's catalogue names about fifteen
+
+### **Practice**
+
+* **Probe** — One named check, asked the same way of every repository
+* **Capability detection** — Establishing what a repository *has* — a linter, a test runner — rather than how good it is
+* **Blocking** — A check that can prevent a merge, which takes two things: the job must be able to fail, *and* its status check must be required by branch protection. A job that fails while the pull request stays mergeable is a failing check rather than a blocking one. Nothing in a Code Futures report blocks unless your team made it so. See §7
+* **Branch gate** — What the default branch requires before a change lands: approving reviews, passing status checks, resolved conversations, and whether administrators are exempt. These are independent. Zero required approving reviews means review is not enforced, which is not the same as nothing being enforced — required status checks can still hold
+* **SAST** — Static application security testing. Analysis that looks for vulnerability patterns in source rather than in a running system
+* **Security hotspot** — Unrelated to a structural hotspot, confusingly. Security-sensitive code a person must review, rather than a vulnerability claim
+* **Quality gate** — A threshold somebody configured, which analysis either meets or does not. Frequently left at a default nobody chose
+
+### **Kinds of test**
+
+Each names a capability, and the capability exists whether or not anything runs it. Configured but uninvoked reports as `present`; invoked by CI reports as `enforced`. That distinction is the outcome's job, not part of what the kind means.
+
+* **Unit** — A test runner, exercising pieces in isolation
+* **Integration** — A separate suite or job, exercising pieces together
+* **End-to-end** — Playwright, Cypress, Selenium: the system exercised the way a user would
+* **Coverage** — A tool recording which lines a test run executed. Counts lines executed, not behaviour verified
+* **Mutation** — Tooling that changes your code to check whether your tests notice
+
+### **Measurement and score**
+
+* **Measurement** — Data carrying units, a method, and a population. 62% of lines executed; three coupled file pairs
+* **Score** — A measurement collapsed against somebody's threshold, with the reasoning hidden. Reports carry the first and never produce the second
+* **Composite** — A single figure aggregating several measurements, calibrated for a population. Outside that population it is not a weaker signal but a different measurement wearing a familiar label
+
+### **Features and futures**
+
+* **Features** — What software does now. Behaviour creates them
+* **Futures** — What remains possible later. Structure creates them, and every feature spends some
+* **Optionality** — The economic form of the same idea. Structure creates no value by itself and creates choices for tomorrow
+
+Not one probe in a Code Futures report is a feature. That is the point of it, and §1 makes the argument.
+
+### **Classification**
+
+**Internal** — shareable within the program, not published. The word appears in your report's header and is worth unpacking, because it is a third category rather than a hedge.
+
+Your report holds no education record, so confidentiality does not attach to it. It is also not something the program publishes: a document addressed to one team reads badly as a public statement about them. Sharing it with another team is your choice, and that choice is the whole reason the category exists.
+
+---
+
 ## **Acknowledgements**
 
 This guidebook was developed for the Opening Skills and Solutions program at Saint Louis University, and written with the assistance of Claude (Anthropic AI).
