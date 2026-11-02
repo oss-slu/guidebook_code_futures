@@ -659,8 +659,8 @@ The report carries a short version of this — five terms, enough to read it. Th
 
 * **Probe** — One named check, asked the same way of every repository
 * **Capability detection** — Establishing what a repository *has* — a linter, a test runner — rather than how good it is
-* **Blocking** — A check that can prevent a merge, which takes two things: the job must be able to fail, *and* its status check must be required by branch protection. A job that fails while the pull request stays mergeable is a failing check rather than a blocking one. Nothing in a Code Futures report blocks unless your team made it so. See §7
-* **Branch gate** — What the default branch requires before a change lands: approving reviews, passing status checks, resolved conversations, and whether administrators are exempt. These are independent. Zero required approving reviews means review is not enforced, which is not the same as nothing being enforced — required status checks can still hold
+* **Blocking** — A check that can prevent a merge. That takes two things: the job able to fail, and its status check required by branch protection. A job that fails while the pull request still merges is a *failing* check, not a blocking one. See §7
+* **Branch gate** — What the default branch requires before a change lands. Approving reviews, status checks, conversation resolution and administrator exemption are independent settings: zero required reviews means review is not enforced, not that nothing is
 * **SAST** — Static application security testing. Analysis that looks for vulnerability patterns in source rather than in a running system
 * **Security hotspot** — Unrelated to a structural hotspot, confusingly. Security-sensitive code a person must review, rather than a vulnerability claim
 * **Quality gate** — A threshold somebody configured, which analysis either meets or does not. Frequently left at a default nobody chose
