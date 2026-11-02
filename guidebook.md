@@ -659,18 +659,20 @@ The report carries a short version of this — five terms, enough to read it. Th
 
 * **Probe** — One named check, asked the same way of every repository
 * **Capability detection** — Establishing what a repository *has* — a linter, a test runner — rather than how good it is
-* **Blocking** — A check that can fail a build. Nothing in a Code Futures report is blocking unless your team chose to make it so. See §7
-* **Branch gate** — What the default branch requires before a change lands. Protection that requires zero approving reviews is a gate that gates nothing
+* **Blocking** — A check that can prevent a merge, which takes two things: the job must be able to fail, *and* its status check must be required by branch protection. A job that fails while the pull request stays mergeable is a failing check rather than a blocking one. Nothing in a Code Futures report blocks unless your team made it so. See §7
+* **Branch gate** — What the default branch requires before a change lands: approving reviews, passing status checks, resolved conversations, and whether administrators are exempt. These are independent. Zero required approving reviews means review is not enforced, which is not the same as nothing being enforced — required status checks can still hold
 * **SAST** — Static application security testing. Analysis that looks for vulnerability patterns in source rather than in a running system
 * **Security hotspot** — Unrelated to a structural hotspot, confusingly. Security-sensitive code a person must review, rather than a vulnerability claim
 * **Quality gate** — A threshold somebody configured, which analysis either meets or does not. Frequently left at a default nobody chose
 
 ### **Kinds of test**
 
-* **Unit** — A test runner configured, and invoked in CI
-* **Integration** — A separate job, or a suite marked as such
-* **End-to-end** — Playwright, Cypress, Selenium — the system exercised the way a user would
-* **Coverage** — A coverage tool wired into CI. Counts lines executed, not behaviour verified
+Each names a capability, and the capability exists whether or not anything runs it. Configured but uninvoked reports as `present`; invoked by CI reports as `enforced`. That distinction is the outcome's job, not part of what the kind means.
+
+* **Unit** — A test runner, exercising pieces in isolation
+* **Integration** — A separate suite or job, exercising pieces together
+* **End-to-end** — Playwright, Cypress, Selenium: the system exercised the way a user would
+* **Coverage** — A tool recording which lines a test run executed. Counts lines executed, not behaviour verified
 * **Mutation** — Tooling that changes your code to check whether your tests notice
 
 ### **Measurement and score**
